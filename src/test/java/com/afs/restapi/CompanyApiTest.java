@@ -71,13 +71,13 @@ class CompanyApiTest {
 
     @Test
     void should_delete_company_name() throws Exception {
-        Company company = new Company(1L, "abc");
-        inMemoryCompanyRepository.insert(company);
+        Company company = getCompany1();
+        companyJpaRepository.save(company);
 
-        mockMvc.perform(delete("/companies/{id}", 1))
+        mockMvc.perform(delete("/companies/{id}", company.getId()))
                 .andExpect(MockMvcResultMatchers.status().is(204));
 
-        assertTrue(inMemoryCompanyRepository.findById(1L).isEmpty());
+        assertTrue(companyJpaRepository.findById(1L).isEmpty());
     }
 
     @Test
