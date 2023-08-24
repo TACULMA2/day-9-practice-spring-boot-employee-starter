@@ -36,6 +36,7 @@ public class CompanyService {
     public void update(Long id, Company company) {
         Company toBeUpdatedCompany = findById(id);
         toBeUpdatedCompany.setName(company.getName());
+        companyRepository.save(toBeUpdatedCompany);
     }
 
     public Company create(Company company) {

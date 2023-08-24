@@ -44,7 +44,7 @@ class CompanyApiTest {
         Company previousCompany = new Company(1L, "abc");
         Company newCompany = companyRepository.save(previousCompany);
 
-        Company companyUpdateRequest = new Company(1L, "xyz");
+        Company companyUpdateRequest = new Company(newCompany.getId(), "xyz");
         ObjectMapper objectMapper = new ObjectMapper();
         String updatedEmployeeJson = objectMapper.writeValueAsString(companyUpdateRequest);
         mockMvc.perform(put("/companies/{id}", newCompany.getId())
@@ -55,8 +55,8 @@ class CompanyApiTest {
         Optional<Company> optionalCompany = companyRepository.findById(newCompany.getId());
         assertTrue(optionalCompany.isPresent());
         Company updatedCompany = optionalCompany.get();
-        Assertions.assertEquals(newCompany.getId(), updatedCompany.getId());
-        Assertions.assertEquals(newCompany.getName(), updatedCompany.getName());
+        Assertions.assertEquals(companyUpdateRequest.getId(), updatedCompany.getId());
+        Assertions.assertEquals("xyz", updatedCompany.getName());
     }
 
     @Test
