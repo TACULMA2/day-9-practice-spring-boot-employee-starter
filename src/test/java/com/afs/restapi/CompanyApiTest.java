@@ -97,12 +97,12 @@ class CompanyApiTest {
     @Test
     void should_find_companies() throws Exception {
         Company company = getCompany1();
-        inMemoryCompanyRepository.insert(company);
+        companyJpaRepository.save(company);
 
         mockMvc.perform(get("/companies"))
                 .andExpect(MockMvcResultMatchers.status().is(200))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(1))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(1L))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(notNullValue()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value(company.getName()));
     }
 
