@@ -7,6 +7,7 @@ import com.afs.restapi.repository.EmployeeJpaRepository;
 import com.afs.restapi.repository.InMemoryCompanyRepository;
 import com.afs.restapi.repository.InMemoryEmployeeRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Optional;
 
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -148,14 +150,14 @@ class CompanyApiTest {
     @Test
     void should_find_employees_by_companies() throws Exception {
         Company company = getCompany1();
-        inMemoryCompanyRepository.insert(company);
+        companyJpaRepository.save(company);
         Employee employee = getEmployee(company);
-        inMemoryEmployeeRepository.insert(employee);
+        employeeJpaRepository.save(employee);
 
-        mockMvc.perform(get("/companies/{companyId}/employees", 1L))
+        mockMvc.perform(get("/companies/{companyId}/employees", company.getId()))
                 .andExpect(MockMvcResultMatchers.status().is(200))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.length()").value(1))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(employee.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", Matchers.hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(notNullValue()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].name").value(employee.getName()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].age").value(employee.getAge()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].gender").value(employee.getGender()))

@@ -57,8 +57,8 @@ public class CompanyService {
         return companyJpaRepository.save(company);
     }
 
-    public Optional<Employee> findEmployeesByCompanyId(Long id) {
-        return employeeJpaRepository.findById(id);
+    public List<Employee> findEmployeesByCompanyId(Long companyId) {
+        return employeeJpaRepository.findByCompanyId(companyId);
     }
 
     public void delete(Long id) {

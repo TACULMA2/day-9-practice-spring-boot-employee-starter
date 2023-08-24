@@ -53,7 +53,7 @@ public class CompanyController {
     }
 
     @GetMapping("/{id}/employees")
-    public Optional<Employee> getEmployeesByCompanyId(@PathVariable Long id) {
+    public List<Employee> getEmployeesByCompanyId(@PathVariable Long id) {
         return companyService.findEmployeesByCompanyId(id);
     }
 
