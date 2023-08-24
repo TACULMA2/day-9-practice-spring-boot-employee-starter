@@ -5,34 +5,19 @@ import com.afs.restapi.entity.Employee;
 import com.afs.restapi.exception.CompanyNotFoundException;
 import com.afs.restapi.repository.CompanyJpaRepository;
 import com.afs.restapi.repository.EmployeeJpaRepository;
-import com.afs.restapi.repository.InMemoryCompanyRepository;
-import com.afs.restapi.repository.InMemoryEmployeeRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CompanyService {
     private final CompanyJpaRepository companyJpaRepository;
     private final EmployeeJpaRepository employeeJpaRepository;
-    private final InMemoryCompanyRepository inMemoryCompanyRepository;
-    private final InMemoryEmployeeRepository inMemoryEmployeeRepository;
 
-    public CompanyService(CompanyJpaRepository companyJpaRepository, EmployeeJpaRepository employeeJpaRepository, InMemoryCompanyRepository inMemoryCompanyRepository, InMemoryEmployeeRepository inMemoryEmployeeRepository) {
+    public CompanyService(CompanyJpaRepository companyJpaRepository, EmployeeJpaRepository employeeJpaRepository) {
         this.companyJpaRepository = companyJpaRepository;
         this.employeeJpaRepository = employeeJpaRepository;
-        this.inMemoryCompanyRepository = inMemoryCompanyRepository;
-        this.inMemoryEmployeeRepository = inMemoryEmployeeRepository;
-    }
-
-    public InMemoryCompanyRepository getCompanyRepository() {
-        return inMemoryCompanyRepository;
-    }
-
-    public InMemoryEmployeeRepository getEmployeeRepository() {
-        return inMemoryEmployeeRepository;
     }
 
     public List<Company> findAll() {

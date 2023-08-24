@@ -4,8 +4,6 @@ import com.afs.restapi.entity.Company;
 import com.afs.restapi.entity.Employee;
 import com.afs.restapi.repository.CompanyJpaRepository;
 import com.afs.restapi.repository.EmployeeJpaRepository;
-import com.afs.restapi.repository.InMemoryCompanyRepository;
-import com.afs.restapi.repository.InMemoryEmployeeRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
@@ -20,9 +18,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
@@ -37,16 +33,8 @@ class CompanyApiTest {
     @Autowired
     private EmployeeJpaRepository employeeJpaRepository;
 
-    @Autowired
-    private InMemoryCompanyRepository inMemoryCompanyRepository;
-
-    @Autowired
-    private InMemoryEmployeeRepository inMemoryEmployeeRepository;
-
     @BeforeEach
     void setUp() {
-        inMemoryCompanyRepository.clearAll();
-        inMemoryEmployeeRepository.clearAll();
         companyJpaRepository.deleteAll();
         employeeJpaRepository.deleteAll();
     }
