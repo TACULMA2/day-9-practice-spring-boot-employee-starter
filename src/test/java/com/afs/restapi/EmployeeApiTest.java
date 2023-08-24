@@ -1,6 +1,7 @@
 package com.afs.restapi;
 
 import com.afs.restapi.entity.Employee;
+import com.afs.restapi.repository.EmployeeJpaRepository;
 import com.afs.restapi.repository.InMemoryEmployeeRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
@@ -24,7 +25,8 @@ class EmployeeApiTest {
 
     @Autowired
     private MockMvc mockMvc;
-
+    @Autowired
+    private EmployeeJpaRepository employeeJpaRepository;
     @Autowired
     private InMemoryEmployeeRepository inMemoryEmployeeRepository;
 
@@ -76,7 +78,7 @@ class EmployeeApiTest {
     @Test
     void should_find_employees() throws Exception {
         Employee employee = getEmployeeBob();
-        inMemoryEmployeeRepository.insert(employee);
+        employeeJpaRepository.save(employee);
 
         mockMvc.perform(get("/employees"))
                 .andExpect(MockMvcResultMatchers.status().is(200))
