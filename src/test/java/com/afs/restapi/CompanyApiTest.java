@@ -2,6 +2,8 @@ package com.afs.restapi;
 
 import com.afs.restapi.entity.Company;
 import com.afs.restapi.entity.Employee;
+import com.afs.restapi.repository.CompanyJpaRepository;
+import com.afs.restapi.repository.EmployeeJpaRepository;
 import com.afs.restapi.repository.InMemoryCompanyRepository;
 import com.afs.restapi.repository.InMemoryEmployeeRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +29,10 @@ class CompanyApiTest {
 
     @Autowired
     private MockMvc mockMvc;
+    @Autowired
+    private CompanyJpaRepository companyJpaRepository;
+    @Autowired
+    private EmployeeJpaRepository employeeJpaRepository;
 
     @Autowired
     private InMemoryCompanyRepository inMemoryCompanyRepository;
@@ -38,26 +44,28 @@ class CompanyApiTest {
     void setUp() {
         inMemoryCompanyRepository.clearAll();
         inMemoryEmployeeRepository.clearAll();
+        companyJpaRepository.deleteAll();
+        employeeJpaRepository.deleteAll();
     }
 
     @Test
     void should_update_company_name() throws Exception {
         Company previousCompany = new Company(1L, "abc");
-        inMemoryCompanyRepository.insert(previousCompany);
+        Company newCompany = companyJpaRepository.save(previousCompany);
 
         Company companyUpdateRequest = new Company(1L, "xyz");
         ObjectMapper objectMapper = new ObjectMapper();
         String updatedEmployeeJson = objectMapper.writeValueAsString(companyUpdateRequest);
-        mockMvc.perform(put("/companies/{id}", 1)
+        mockMvc.perform(put("/companies/{id}", newCompany.getId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updatedEmployeeJson))
                 .andExpect(MockMvcResultMatchers.status().is(204));
 
-        Optional<Company> optionalCompany = inMemoryCompanyRepository.findById(1L);
+        Optional<Company> optionalCompany = companyJpaRepository.findById(newCompany.getId());
         assertTrue(optionalCompany.isPresent());
         Company updatedCompany = optionalCompany.get();
-        Assertions.assertEquals(previousCompany.getId(), updatedCompany.getId());
-        Assertions.assertEquals(companyUpdateRequest.getName(), updatedCompany.getName());
+        Assertions.assertEquals(newCompany.getId(), updatedCompany.getId());
+        Assertions.assertEquals(newCompany.getName(), updatedCompany.getName());
     }
 
     @Test
