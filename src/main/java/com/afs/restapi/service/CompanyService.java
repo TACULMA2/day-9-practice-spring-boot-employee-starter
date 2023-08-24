@@ -45,8 +45,6 @@ public class CompanyService {
 
     public Company findById(Long id) {
         Company company = companyJpaRepository.findById(id).orElseThrow(CompanyNotFoundException::new);
-        List<Employee> employees = getEmployeeRepository().findByCompanyId(company.getId());
-        company.setEmployees(employees);
         return company;
     }
 
